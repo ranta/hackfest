@@ -1,3 +1,7 @@
+html {
+  font-family: sans-serif;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -5,10 +9,41 @@ main {
 }
 
 #pokemon {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 
 img {
   max-width: 80%;
+  height: auto;
+}
+
+#choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 1rem;
+}
+
+.choice-button {
+  padding: 0.5rem;
+  text-transform: capitalize;
+}
+
+#score {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
 }
