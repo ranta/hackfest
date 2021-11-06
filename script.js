@@ -9,7 +9,6 @@ const API_URL = 'https://pokeapi.co/api/v2';
 const state = {
   currentPokemon: undefined,
   streak: 0,
-  maxStreak: 0,
   correct: 0,
   incorrect: 0,
 };
@@ -106,7 +105,7 @@ const renderScore = () => {
   div.querySelector('#score-correct').textContent = state.correct;
   div.querySelector('#score-incorrect').textContent = state.incorrect;
   div.querySelector('#score-streak').textContent = state.streak;
-  div.querySelector('#score-max-streak').textContent = state.maxStreak;
+  div.querySelector('#score-max-streak').textContent = localStorage.getItem('maxStreak') || 0;
 
   main.append(div);
 };
@@ -148,8 +147,8 @@ const handleChoiceClick = async (event) => {
     results = document.getElementById('correct-template').content.cloneNode(true);
     state.correct++;
     state.streak++;
-    if (state.streak > state.maxStreak) {
-      state.maxStreak = state.streak;
+    if (state.streak > (localStorage.getItem('maxStreak')) || 0) {
+      localStorage.setItem('maxStreak', state.streak);
     }
   } else {
     results = document.getElementById('incorrect-template').content.cloneNode(true);
