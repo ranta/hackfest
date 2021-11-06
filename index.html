@@ -11,17 +11,20 @@
 <body>
 <main id="main">
   <h1>Amazing Pokemon Game</h1>
-  <form id="pokemon-form">
-    <label for="name">Name</label>
-    <input id="name" name="name" type="text">
-    <input id="submit" type="submit">
-  </form>
   <h2>Guess the name of the pokemon</h2>
+  <div id="choices">
+    <button id="choice-1" class="choice-button"></button>
+    <button id="choice-2" class="choice-button"></button>
+    <button id="choice-3" class="choice-button"></button>
+    <button id="choice-4" class="choice-button"></button>
+  </div>
+
   <template id="pokemon-template">
     <div id="pokemon">
-      <img alt="" src="">
+      <img alt="" src="" height="400" width="400">
     </div>
   </template>
+
   <template id="score-template">
     <div id="score">
       <p>Correct: <span id="score-correct"></span></p>
@@ -30,11 +33,13 @@
       <p>Max streak: <span id="score-max-streak"></span></p>
     </div>
   </template>
+
   <template id="correct-template">
     <div id="correct">
       <p>You guessed correctly! :) It was <span></span></p>
     </div>
   </template>
+
   <template id="incorrect-template">
     <div id="incorrect">
       <p>You guessed incorrectly! :( Correct name was <span></span></p>

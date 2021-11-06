@@ -15,10 +15,22 @@ const state = {
 };
 
 /**
+ * Shuffles array in place. ES6 version
+ * @param {Array} a items An array containing the items.
+ */
+const shuffle = (a) => {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+/**
  * @returns Pokemon[]
  */
 const getPokemons = async () => {
-  const response = await fetch(`${API_URL}/pokemon?limit=151`);
+  const response = await fetch(`${API_URL}/pokemon?limit=251`);
   return (await response.json()).results;
 };
 
@@ -50,6 +62,37 @@ const renderPokemon = () => {
 };
 
 /**
+ * @returns {string[]}
+ */
+const getChoices = () => {
+  if (state.pokemons.length < 3) {
+    throw Error('Thanks for playing!');
+  }
+  const choices = new Set([state.currentPokemon.name]);
+  while (choices.size < 4) {
+    const index = Math.floor(Math.random() * state.pokemons.length);
+    const pokemon = state.pokemons[index];
+    choices.add(pokemon.name);
+  }
+
+  return shuffle(Array.from(choices));
+};
+
+/**
+ * @returns {void}
+ */
+const renderChoices = () => {
+  const main = document.getElementById('main');
+  const div = document.getElementById('choices');
+
+  for (const [i, choice] of getChoices().entries()) {
+    div.querySelector(`#choice-${i + 1}`).textContent = choice;
+  }
+
+  main.append(div);
+};
+
+/**
  * @returns {void}
  */
 const renderScore = () => {
@@ -69,27 +112,35 @@ const renderScore = () => {
 };
 
 /**
- * @param {Pokemon[]} pokemons
  * @return {Pokemon}
  */
-const getRandomPokemon = (pokemons) => {
-  const index = Math.floor(Math.random() * pokemons.length);
-  const pokemon = pokemons[index];
-  pokemons.splice(index, 1);
+const getRandomPokemon = () => {
+  const index = Math.floor(Math.random() * state.pokemons.length);
+  const pokemon = state.pokemons[index];
+  state.pokemons.splice(index, 1);
   return pokemon;
 };
 
 /**
- * @param {Pokemon[]} pokemons
- * @return {((Event) => Promise<void>)}
+ * @returns {void}
  */
-const handleSubmit = (pokemons) => async (event) => {
+const renderGame = () => {
+  renderPokemon();
+  renderChoices();
+  renderScore();
+};
+
+/**
+ * @param {Event} event
+ * @return {Promise<void>}
+ */
+const handleChoiceClick = async (event) => {
   event.preventDefault();
   document.getElementById('correct')?.remove();
   document.getElementById('incorrect')?.remove();
-  const randomPokemon = getRandomPokemon(pokemons);
+  const randomPokemon = getRandomPokemon(state.pokemons);
 
-  const guessedName = event.target.name.value;
+  const guessedName = event.target.textContent;
   event.target.name.value = '';
 
   let results;
@@ -108,13 +159,14 @@ const handleSubmit = (pokemons) => async (event) => {
   results.querySelector('p > span').textContent = state.currentPokemon.name;
   main.append(results);
   state.currentPokemon = randomPokemon;
-  renderPokemon();
-  renderScore();
+  renderGame();
 };
 
 window.addEventListener('load', async () => {
-  const pokemons = await getPokemons();
-  state.currentPokemon = getRandomPokemon(pokemons);
-  renderPokemon();
-  document.getElementById('pokemon-form').onsubmit = handleSubmit(pokemons);
+  state.pokemons = await getPokemons();
+  state.currentPokemon = getRandomPokemon();
+  renderGame();
+  document.querySelectorAll('.choice-button').forEach(item => {
+    item.addEventListener('click', handleChoiceClick);
+  });
 });
