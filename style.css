@@ -38,6 +38,11 @@ img {
   grid-template-rows: 1fr 1fr;
 }
 
+.pokemon-name {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
 @media (max-width: 500px) {
   h1 {
     font-size: 1.6rem;
