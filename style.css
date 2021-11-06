@@ -38,6 +38,14 @@ img {
   grid-template-rows: 1fr 1fr;
 }
 
+#correct {
+  color: darkgreen;
+}
+
+#incorrect {
+  color: darkred;
+}
+
 .pokemon-name {
   font-weight: bold;
   text-transform: capitalize;
