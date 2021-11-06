@@ -3,17 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Vincit Hackfest 2021</title>
+  <title>Amazing Pokemon Game</title>
   <link href="style.css" rel="stylesheet">
   <script src="script.js" type="text/javascript"></script>
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
 </head>
 <body>
 <main id="main">
-  <h1>A Game</h1>
+  <h1>Amazing Pokemon Game</h1>
+  <form id="pokemon-form">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text">
+    <input id="submit" type="submit">
+  </form>
+  <h2>Guess the name of the pokemon</h2>
   <template id="pokemon-template">
     <div id="pokemon">
-      <h2></h2>
-      <img alt="" loading="lazy" src="">
+      <img alt="" src="">
+    </div>
+  </template>
+  <template id="correct-template">
+    <div id="correct">
+      <p>You guessed correctly! :) It was <span></span></p>
+    </div>
+  </template>
+  <template id="incorrect-template">
+    <div id="incorrect">
+      <p>You guessed incorrectly! :( Correct name was <span></span></p>
     </div>
   </template>
 </main>
