@@ -71,7 +71,7 @@ const handleSubmit = (pokemons) => async (event) => {
   event.target.name.value = '';
 
   let results;
-  if (guessedName === currentPokemon.name) {
+  if (guessedName.toLowerCase() === currentPokemon.name.toLowerCase()) {
     results = document.getElementById('correct-template').content.cloneNode(true);
   } else {
     results = document.getElementById('incorrect-template').content.cloneNode(true);
