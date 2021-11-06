@@ -6,10 +6,13 @@ const API_URL = 'https://pokeapi.co/api/v2';
  * @property {string} url
  */
 
-/**
- * @type Pokemon
- */
-let currentPokemon;
+const state = {
+  currentPokemon: undefined,
+  streak: 0,
+  maxStreak: 0,
+  correct: 0,
+  incorrect: 0,
+};
 
 /**
  * @returns Pokemon[]
@@ -37,11 +40,30 @@ const renderPokemon = () => {
   const main = document.getElementById('main');
   const template = document.getElementById('pokemon-template');
 
-  const id = currentPokemon.url.match(/\/(\d+)\//)[1];
+  const id = state.currentPokemon.url.match(/\/(\d+)\//)[1];
   const imageUrl = getImageUrl(Number(id));
   const div = template.content.cloneNode(true);
 
   div.querySelector('img').src = imageUrl;
+
+  main.append(div);
+};
+
+/**
+ * @returns {void}
+ */
+const renderScore = () => {
+  document.getElementById('score')?.remove();
+
+  const main = document.getElementById('main');
+  const template = document.getElementById('score-template');
+
+  const div = template.content.cloneNode(true);
+
+  div.querySelector('#score-correct').textContent = state.correct;
+  div.querySelector('#score-incorrect').textContent = state.incorrect;
+  div.querySelector('#score-streak').textContent = state.streak;
+  div.querySelector('#score-max-streak').textContent = state.maxStreak;
 
   main.append(div);
 };
@@ -71,20 +93,28 @@ const handleSubmit = (pokemons) => async (event) => {
   event.target.name.value = '';
 
   let results;
-  if (guessedName.toLowerCase() === currentPokemon.name.toLowerCase()) {
+  if (guessedName.toLowerCase() === state.currentPokemon.name.toLowerCase()) {
     results = document.getElementById('correct-template').content.cloneNode(true);
+    state.correct++;
+    state.streak++;
+    if (state.streak > state.maxStreak) {
+      state.maxStreak = state.streak;
+    }
   } else {
     results = document.getElementById('incorrect-template').content.cloneNode(true);
+    state.incorrect++;
+    state.streak = 0;
   }
-  results.querySelector('p > span').textContent = currentPokemon.name;
+  results.querySelector('p > span').textContent = state.currentPokemon.name;
   main.append(results);
-  currentPokemon = randomPokemon;
+  state.currentPokemon = randomPokemon;
   renderPokemon();
+  renderScore();
 };
 
 window.addEventListener('load', async () => {
   const pokemons = await getPokemons();
-  currentPokemon = getRandomPokemon(pokemons);
+  state.currentPokemon = getRandomPokemon(pokemons);
   renderPokemon();
   document.getElementById('pokemon-form').onsubmit = handleSubmit(pokemons);
 });
