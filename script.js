@@ -65,7 +65,14 @@ const renderPokemon = () => {
  */
 const getChoices = () => {
   if (state.pokemons.length < 3) {
-    throw Error('Thanks for playing!');
+    // Game over
+    document.getElementById('choices')?.remove();
+    document.getElementById('pokemon')?.remove();
+    const main = document.getElementById('main');
+    const h1 = document.createElement('h1');
+    h1.textContent = 'Thank you for playing Amazing Pokemon Game!';
+    main.append(h1);
+    throw Error();
   }
   const choices = new Set([state.currentPokemon.name]);
   while (choices.size < 4) {
